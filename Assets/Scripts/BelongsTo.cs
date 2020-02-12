@@ -9,9 +9,7 @@ public class BelongsTo : MonoBehaviour
     public void SetPlayer(GameObject Player)
     {
         player = Player;
-        transform.position = player.transform.position + new Vector3(0, 0.9f, 0);
+        if (Player != null) transform.position = player.transform.position + new Vector3(0, 0.9f, 0);
     }
-
-    void Start() { }
 
 }

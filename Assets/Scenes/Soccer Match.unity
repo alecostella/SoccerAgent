@@ -153,7 +153,7 @@ Transform:
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &97679089
 SphereCollider:
@@ -290,8 +290,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76fa3072f2eb56f49ae732d32715956a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 0}
-  BallBody: {fileID: 0}
+  ball: {fileID: 97679092}
+  BallBody: {fileID: 97679093}
   DangerRange: 10
 --- !u!54 &151058120
 Rigidbody:
@@ -415,8 +415,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76fa3072f2eb56f49ae732d32715956a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 0}
-  BallBody: {fileID: 0}
+  ball: {fileID: 97679092}
+  BallBody: {fileID: 97679093}
   DangerRange: 10
 --- !u!54 &176912033
 Rigidbody:
@@ -526,7 +526,7 @@ Transform:
   - {fileID: 2068102309}
   - {fileID: 1205903248}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &459470178
 GameObject:
@@ -837,7 +837,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &874270208
 GameObject:
@@ -1029,7 +1029,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &999061079
 GameObject:
@@ -1156,6 +1156,7 @@ MonoBehaviour:
   ball: {fileID: 97679092}
   BallBody: {fileID: 97679093}
   DangerRange: 5
+  reactionTime: 1
 --- !u!1 &1040194334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,8 +1204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76fa3072f2eb56f49ae732d32715956a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 0}
-  BallBody: {fileID: 0}
+  ball: {fileID: 97679092}
+  BallBody: {fileID: 97679093}
   DangerRange: 10
 --- !u!54 &1040194339
 Rigidbody:
@@ -1331,6 +1332,7 @@ MonoBehaviour:
   ball: {fileID: 97679092}
   BallBody: {fileID: 97679093}
   DangerRange: 5
+  reactionTime: 1
 --- !u!54 &1092683774
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1456,6 +1458,7 @@ MonoBehaviour:
   ball: {fileID: 97679092}
   BallBody: {fileID: 97679093}
   DangerRange: 5
+  reactionTime: 1
 --- !u!54 &1205903252
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1688,8 +1691,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76fa3072f2eb56f49ae732d32715956a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 0}
-  BallBody: {fileID: 0}
+  ball: {fileID: 97679092}
+  BallBody: {fileID: 97679093}
   DangerRange: 10
 --- !u!54 &1496550262
 Rigidbody:
@@ -1908,7 +1911,7 @@ Transform:
   - {fileID: 1496550258}
   - {fileID: 176912029}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1695141944
 GameObject:
@@ -1960,6 +1963,7 @@ MonoBehaviour:
   ball: {fileID: 97679092}
   BallBody: {fileID: 97679093}
   DangerRange: 5
+  reactionTime: 1
 --- !u!54 &1695141949
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2145,6 +2149,36 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &1908642131
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1908642132}
+  m_Layer: 0
+  m_Name: SceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1908642132
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908642131}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 38.25616, y: 1.0529747, z: 28.386215}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2068102308
 GameObject:
   m_ObjectHideFlags: 0
@@ -2195,6 +2229,7 @@ MonoBehaviour:
   ball: {fileID: 97679092}
   BallBody: {fileID: 97679093}
   DangerRange: 5
+  reactionTime: 1
 --- !u!54 &2068102313
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2367,7 +2402,7 @@ Transform:
   - {fileID: 1723515333}
   - {fileID: 653140161}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2126101944
 GameObject:
@@ -2416,8 +2451,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76fa3072f2eb56f49ae732d32715956a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ball: {fileID: 0}
-  BallBody: {fileID: 0}
+  ball: {fileID: 97679092}
+  BallBody: {fileID: 97679093}
   DangerRange: 10
 --- !u!54 &2126101949
 Rigidbody:
