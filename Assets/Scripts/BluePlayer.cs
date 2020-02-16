@@ -56,13 +56,15 @@ public class BluePlayer : MonoBehaviour
         if (ball.player == null) return false;
         return ball.player.CompareTag("BluePlayer");
     }
-    private bool EnemyBall() { return !AlliedBall(); }
+    private bool EnemyBall() { return !ball.player.CompareTag("BluePlayer"); }
     private bool BallNotInSight() { return !BallInSight(); }
     private bool BallToMate() { return AlliedBall() & !BallControl(); }
     private bool CanIPass() { return LookForAlly() != null; }
 
     //actual actions
-    private void BringBallAhead() { Debug.Log("BringBallAhead"); ApplyForceToReachVelocity(rb, new Vector3(-8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(-8, 0, 0), 20); }
+    private void BringBallAhead() { //Debug.Log("BringBallAhead");
+        ApplyForceToReachVelocity(rb, new Vector3(-8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(-8, 0, 0), 20);
+    }
     private void RetreatToBall() { ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20); }
     private void ChaseBall()
     {
@@ -204,7 +206,7 @@ public class BluePlayer : MonoBehaviour
     }
     private void PrintSupport()
     {
-        Debug.Log(gameObject.ToString() + "Support");
+        Debug.Log(gameObject.ToString() + "Support - BallToMate = " + BallToMate());
     }
     private void PrintBacking()
     {
@@ -246,10 +248,10 @@ public class BluePlayer : MonoBehaviour
         Chase.stayActions.Add(ChaseBall);
         Chase.stayActions.Add(SpeedRun);
 
-        //Advance.enterActions.Add(PrintAdvance);
-        //SupportAdv.enterActions.Add(PrintSupport);
-        //Backing.enterActions.Add(PrintBacking);
-        //Chase.enterActions.Add(PrintChase);
+        Advance.enterActions.Add(PrintAdvance);
+        SupportAdv.enterActions.Add(PrintSupport);
+        Backing.enterActions.Add(PrintBacking);
+        Chase.enterActions.Add(PrintChase);
 
         FSMTransition t1 = new FSMTransition(BallControl);
         FSMTransition t2 = new FSMTransition(BallToMate);
