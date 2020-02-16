@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RedPlayer : MonoBehaviour
@@ -24,7 +23,7 @@ public class RedPlayer : MonoBehaviour
         int enemies = 0;
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("BluePlayer"))
         {
-            if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange && go.transform.position.x < gameObject.transform.position.x) enemies += 1;
+            if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange && go.transform.position.x > gameObject.transform.position.x) enemies += 1;
         }
         return enemies;
     }
@@ -55,7 +54,7 @@ public class RedPlayer : MonoBehaviour
     private bool AlliedBall()
     {
         if (ball.player == null) return false;
-        return gameObject.CompareTag(ball.player.tag);
+        return ball.player.CompareTag("RedPlayer");
     }
     private bool EnemyBall() { return !AlliedBall(); }
     private bool BallNotInSight() { return !BallInSight(); }
@@ -63,8 +62,8 @@ public class RedPlayer : MonoBehaviour
     private bool CanIPass() { return LookForAlly() != null; }
 
     //actual actions
-    private void BringBallAhead() { ApplyForceToReachVelocity(rb, new Vector3(-8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(-8, 0, 0), 20); }
-    private void RetreatToBall() { ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20); }
+    private void BringBallAhead() { Debug.Log("BringBallAhead"); ApplyForceToReachVelocity(rb, new Vector3(8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(8, 0, 0), 20); }
+    private void RetreatToBall() { ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20); }
     private void ChaseBall()
     {
         ApplyForceToReachVelocity(rb, (BallBody.position - gameObject.transform.position).normalized * 10, 30);
@@ -74,7 +73,7 @@ public class RedPlayer : MonoBehaviour
     private void ShootBall()
     {
         if (!GoalInSight()) return;
-        //Debug.Log("Provo a tirare");
+        Debug.Log("Provo a tirare");
         BallBody.AddForce((BluePos - gameObject.transform.position).normalized * 2500);
         ball.SetPlayer(null);
     }
@@ -84,11 +83,11 @@ public class RedPlayer : MonoBehaviour
         GameObject target = null;
         foreach (GameObject go in allies)
         {
-            float lowestX = 10000;
+            float highestX = -10000;
             if (go.transform.position != gameObject.transform.position)
             {
                 bool ray = Physics.Raycast(gameObject.transform.position, go.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
-                if (go.transform == hit.transform & hit.transform.position.x < lowestX) { target = go; }
+                if (go.transform == hit.transform & hit.transform.position.x > highestX) { target = go; }
             }
         }
         return target;
@@ -101,13 +100,13 @@ public class RedPlayer : MonoBehaviour
             GameObject receiver = LookForAlly();
             //Debug.Log("Passo a" + receiver.ToString());
             BallBody.AddForce((receiver.transform.position - gameObject.transform.position).normalized * 2500);
+            ball.SetPlayer(null);
         }
-        ball.SetPlayer(null);
     }
 
     private void ReachPosition()
     {
-        if (gameObject.transform.position.x >= -60)
+        if (gameObject.transform.position.x <= 60)
         {
             float meanZ = 0;
             foreach (GameObject go in allies)
@@ -116,7 +115,7 @@ public class RedPlayer : MonoBehaviour
             }
             meanZ /= 5;
             float sign = (gameObject.transform.position.z - meanZ) / Math.Abs(gameObject.transform.position.z - meanZ);
-            ApplyForceToReachVelocity(rb, (new Vector3(-60, 0, -50 * sign) - gameObject.transform.position).normalized * 10, 20);
+            ApplyForceToReachVelocity(rb, (new Vector3(60, 0, -50 * sign) - gameObject.transform.position).normalized * 10, 20);
         }
         else
         {
@@ -138,8 +137,6 @@ public class RedPlayer : MonoBehaviour
         if (!OneEnemyAround()) return;
         bool success = Rand.Next(5) <= Skill;
 
-        //Debug.Log(success && OneEnemyAround());
-
         Rigidbody EnemyBody = null;
         GameObject Enemy = null;
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("BluePlayer"))
@@ -153,13 +150,13 @@ public class RedPlayer : MonoBehaviour
         }
 
         //the player dashes in any case
-        rb.AddForce(-50, 0, 0);
+        rb.AddForce(50, 0, 0);
 
         if (success)
         {
             //get rid of the enemy in a simple way
             EnemyBody.AddForce(0, 0, 1000);
-            BallBody.AddForce(-50, 0, 0);
+            BallBody.AddForce(50, 0, 0);
         }
         else
         {
@@ -173,13 +170,13 @@ public class RedPlayer : MonoBehaviour
     {
         if (!GoingOnward)
         {
-            ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20);
-            if (gameObject.transform.position.x >= -60) { GoingOnward = true; }
+            ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
+            if (gameObject.transform.position.x <= 60) { GoingOnward = true; }
         }
         else
         {
-            ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
-            if (gameObject.transform.position.x <= -80) { GoingOnward = false; }
+            ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20);
+            if (gameObject.transform.position.x >= 80) { GoingOnward = false; }
         }
     }
 
@@ -187,7 +184,7 @@ public class RedPlayer : MonoBehaviour
     {
         if (MoreEnemiesAround() & !CanIPass())
         {
-            //Debug.Log("Blue HardDribble");
+            //Debug.Log("Red HardDribble");
             Skill -= 1;
             TryDribble();
             Skill += 1;
@@ -198,29 +195,31 @@ public class RedPlayer : MonoBehaviour
     {
         if ((BallBody.transform.position - gameObject.transform.position).magnitude <= 1.5 && ball.player == null) { ball.SetPlayer(gameObject); }
     }
+
     private void PrintAdvance()
     {
-        Debug.Log(gameObject.ToString() + "Advance");
+        Debug.Log(gameObject.ToString() + "BallControl = "+ BallControl());
     }
     private void PrintSupport()
     {
-        Debug.Log(gameObject.ToString() + "Support");
+        Debug.Log(gameObject.ToString() + "BallToMate = " + BallToMate());
     }
     private void PrintBacking()
     {
-        Debug.Log(gameObject.ToString() + "Backing");
+        Debug.Log(gameObject.ToString() + "Enemy Tag = " + ball.player.tag);
     }
     private void PrintChase()
     {
-        Debug.Log(gameObject.ToString() + "Chase");
+        Debug.Log(gameObject.ToString() + "Enemy Tag = " + ball.player.tag);
     }
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         if (!BallBody) return;
 
-        BluePos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;
-        RedPos = GameObject.Find("BlueGoal").GetComponent<Rigidbody>().position;
+        RedPos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;
+        BluePos = GameObject.Find("BlueGoal").GetComponent<Rigidbody>().position;
         allies = GameObject.FindGameObjectsWithTag("RedPlayer");
         //each player can be average or skilled, setting dribble chance at 50% (meh) or 67% (literally Messi)
         Skill = Rand.Next(1) + 3;
@@ -246,10 +245,10 @@ public class RedPlayer : MonoBehaviour
         Chase.stayActions.Add(ChaseBall);
         Chase.stayActions.Add(SpeedRun);
 
-        Advance.enterActions.Add(PrintAdvance);
-        SupportAdv.enterActions.Add(PrintSupport);
-        Backing.enterActions.Add(PrintBacking);
-        Chase.enterActions.Add(PrintChase);
+        //Advance.enterActions.Add(PrintAdvance);
+        //SupportAdv.enterActions.Add(PrintSupport);
+        //Backing.enterActions.Add(PrintBacking);
+        //Chase.enterActions.Add(PrintChase);
 
         FSMTransition t1 = new FSMTransition(BallControl);
         FSMTransition t2 = new FSMTransition(BallToMate);
@@ -276,8 +275,6 @@ public class RedPlayer : MonoBehaviour
         StartCoroutine(Play());
 
     }
-
-    //void Update() { }
 
     //applies the force necessary to reach the desired velocity
     private static void ApplyForceToReachVelocity(Rigidbody rigidbody, Vector3 velocity, float force = 1, ForceMode mode = ForceMode.Force)

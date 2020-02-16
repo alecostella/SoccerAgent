@@ -54,7 +54,7 @@ public class BluePlayer : MonoBehaviour
     private bool AlliedBall()
     {
         if (ball.player == null) return false;
-        return gameObject.CompareTag(ball.player.tag);
+        return ball.player.CompareTag("BluePlayer");
     }
     private bool EnemyBall() { return !AlliedBall(); }
     private bool BallNotInSight() { return !BallInSight(); }
@@ -62,7 +62,7 @@ public class BluePlayer : MonoBehaviour
     private bool CanIPass() { return LookForAlly() != null; }
 
     //actual actions
-    private void BringBallAhead() { ApplyForceToReachVelocity(rb, new Vector3(-8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(-8, 0, 0), 20); }
+    private void BringBallAhead() { Debug.Log("BringBallAhead"); ApplyForceToReachVelocity(rb, new Vector3(-8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(-8, 0, 0), 20); }
     private void RetreatToBall() { ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20); }
     private void ChaseBall()
     {
@@ -93,15 +93,16 @@ public class BluePlayer : MonoBehaviour
         return target;
     }
 
+    //La riga ball.setplayer(null) era fuori dall'if, e tutto andava ma non come dovuto
     private void PassTheBall()
     {
         if (MoreEnemiesAround() & CanIPass())
         {
             GameObject receiver = LookForAlly();
-            //Debug.Log("Passo a" + receiver.ToString());
+            Debug.Log("Passo a " + receiver.ToString());
             BallBody.AddForce((receiver.transform.position - gameObject.transform.position).normalized * 2500);
+            ball.SetPlayer(null);
         }
-        ball.SetPlayer(null);
     }
 
     private void ReachPosition()
@@ -137,7 +138,7 @@ public class BluePlayer : MonoBehaviour
         if (!OneEnemyAround()) return;
         bool success = Rand.Next(5) <= Skill;
 
-        //Debug.Log(success && OneEnemyAround());
+        Debug.Log("Dribbling: " + success);
 
         Rigidbody EnemyBody = null;
         GameObject Enemy = null;
