@@ -30,14 +30,14 @@ public class RedPlayer : MonoBehaviour
 
     private bool BallInSight()
     {
-        _ = Physics.Raycast(gameObject.transform.position, BallBody.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
-        return (hit.transform == BallBody.transform);
+        bool ray = Physics.Raycast(gameObject.transform.position, BallBody.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
+        return (ray && hit.transform == BallBody.transform);
     }
 
     private bool GoalInSight()
     {
-        _ = Physics.Raycast(gameObject.transform.position, BluePos - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
-        return (hit.transform.position == BluePos & hit.distance < 40);
+        bool ray = Physics.Raycast(gameObject.transform.position, RedPos - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
+        return (ray && hit.transform.position == RedPos & hit.distance < 40);
     }
 
     private bool OneEnemyAround()
@@ -53,10 +53,9 @@ public class RedPlayer : MonoBehaviour
     private bool BallControl() { return ball.player == gameObject; }
     private bool AlliedBall()
     {
-        if (ball.player == null) return false;
-        return ball.player.CompareTag("RedPlayer");
+        return !EnemyBall();
     }
-    private bool EnemyBall() { return !ball.player.CompareTag("RedPlayer"); }
+    private bool EnemyBall() { return !ball.player.CompareTag("RedPlayer") || ball.player == null; }
     private bool BallNotInSight() { return !BallInSight(); }
     private bool BallToMate() { return AlliedBall() & !BallControl(); }
     private bool CanIPass() { return LookForAlly() != null; }
