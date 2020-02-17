@@ -55,7 +55,7 @@ public class RedPlayer : MonoBehaviour
     {
         return !EnemyBall();
     }
-    private bool EnemyBall() { return !ball.player.CompareTag("RedPlayer") || ball.player == null; }
+    private bool EnemyBall() { return ball.player == null || !ball.player.CompareTag("RedPlayer"); }
     private bool BallNotInSight() { return !BallInSight(); }
     private bool BallToMate() { return AlliedBall() & !BallControl(); }
     private bool CanIPass() { return LookForAlly() != null; }
@@ -207,11 +207,11 @@ public class RedPlayer : MonoBehaviour
     }
     private void PrintBacking()
     {
-        Debug.Log(gameObject.ToString() + "Backing - Ball to enemy = " + EnemyBall());
+        Debug.Log(gameObject.ToString() + "Backing - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
     }
     private void PrintChase()
     {
-        Debug.Log(gameObject.ToString() + "Chase - Ball to enemy = " + EnemyBall());
+        Debug.Log(gameObject.ToString() + "Chase - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
     }
 
     void Start()

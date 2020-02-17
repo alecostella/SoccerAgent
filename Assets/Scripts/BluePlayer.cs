@@ -55,7 +55,7 @@ public class BluePlayer : MonoBehaviour
     {
         return !EnemyBall();
     }
-    private bool EnemyBall() { return !ball.player.CompareTag("BluePlayer") || ball.player == null; }
+    private bool EnemyBall() { return ball.player == null || !ball.player.CompareTag("BluePlayer"); }
     private bool BallNotInSight() { return !BallInSight(); }
     private bool BallToMate() { return AlliedBall() & !BallControl(); }
     private bool CanIPass() { return LookForAlly() != null; }
