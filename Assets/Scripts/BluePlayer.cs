@@ -236,7 +236,7 @@ public class BluePlayer : MonoBehaviour
 
         FSMState SupportAdv = new FSMState();
         SupportAdv.enterActions.Add(ReachPosition);
-        SupportAdv.enterActions.Add(ReachPosition);
+        SupportAdv.stayActions.Add(ReachPosition);
 
         FSMState Backing = new FSMState();
         Backing.enterActions.Add(RetreatToBall);
@@ -247,10 +247,10 @@ public class BluePlayer : MonoBehaviour
         Chase.stayActions.Add(ChaseBall);
         Chase.stayActions.Add(SpeedRun);
 
-        Advance.enterActions.Add(PrintAdvance);
-        SupportAdv.enterActions.Add(PrintSupport);
-        Backing.enterActions.Add(PrintBacking);
-        Chase.enterActions.Add(PrintChase);
+        //Advance.enterActions.Add(PrintAdvance);
+        //SupportAdv.enterActions.Add(PrintSupport);
+        //Backing.enterActions.Add(PrintBacking);
+        //Chase.enterActions.Add(PrintChase);
 
         FSMTransition t1 = new FSMTransition(BallControl);
         FSMTransition t2 = new FSMTransition(BallToMate);

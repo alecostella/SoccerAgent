@@ -235,7 +235,7 @@ public class RedPlayer : MonoBehaviour
 
         FSMState SupportAdv = new FSMState();
         SupportAdv.enterActions.Add(ReachPosition);
-        SupportAdv.enterActions.Add(ReachPosition);
+        SupportAdv.stayActions.Add(ReachPosition);
 
         FSMState Backing = new FSMState();
         Backing.enterActions.Add(RetreatToBall);
