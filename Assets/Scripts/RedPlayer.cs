@@ -30,11 +30,9 @@ public class RedPlayer : MonoBehaviour
 
     private bool BallInSight()
     {
-        Vector3 vector = new Vector3(0, 0.9f, 0);
-        bool ray = Physics.Raycast(gameObject.transform.position + vector, BallBody.position - vector - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
-        Debug.Log("Origin = " + (gameObject.transform.position + vector) + " - Direction = " + (BallBody.position - vector - gameObject.transform.position));
-        return (ray);
-        // && hit.transform == BallBody.transform
+        bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
+        Debug.Log(hit.transform.name);
+        return (ray && hit.transform == ball.player.transform);
     }
 
     private bool GoalInSight()
