@@ -35,8 +35,11 @@ public class BluePlayer : MonoBehaviour
             bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
             return (ray && hit.transform == ball.player.transform);
         }
-        else ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
-        return (ray && hit.transform == BallBody.transform);
+        else
+        {
+            bool ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
+            return (ray && hit.transform == BallBody.transform);
+        }
     }
 
     private bool GoalInSight()
