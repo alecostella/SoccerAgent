@@ -6,7 +6,7 @@ public class RedPlayer : MonoBehaviour
 {
     public BelongsTo ball = null;
     public Rigidbody BallBody = null;
-    public int DangerRange = 1;
+    public int DangerRange = 5;
     private Rigidbody rb;
     private Vector3 BluePos;
     private Vector3 RedPos;
@@ -31,7 +31,7 @@ public class RedPlayer : MonoBehaviour
     private bool BallInSight()
     {
         bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
-        Debug.Log(hit.transform.name);
+        //Debug.Log(hit.transform.name);
         return (ray && hit.transform == ball.player.transform);
     }
 
@@ -62,7 +62,7 @@ public class RedPlayer : MonoBehaviour
     private bool CanIPass() { return LookForAlly() != null; }
 
     //actual actions
-    private void BringBallAhead() { //Debug.Log("BringBallAhead");
+    private void BringBallAhead() { ////Debug.Log("BringBallAhead");
         ApplyForceToReachVelocity(rb, new Vector3(8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(8, 0, 0), 20);
     }
     private void RetreatToBall() { ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20); }
@@ -75,7 +75,7 @@ public class RedPlayer : MonoBehaviour
     private void ShootBall()
     {
         if (!GoalInSight()) return;
-        //Debug.Log("Provo a tirare");
+        ////Debug.Log("Provo a tirare");
         BallBody.AddForce((BluePos - gameObject.transform.position).normalized * 2500);
         ball.SetPlayer(null);
     }
@@ -100,7 +100,7 @@ public class RedPlayer : MonoBehaviour
         if (MoreEnemiesAround() & CanIPass())
         {
             GameObject receiver = LookForAlly();
-            //Debug.Log("Passo a" + receiver.ToString());
+            ////Debug.Log("Passo a" + receiver.ToString());
             BallBody.AddForce((receiver.transform.position - gameObject.transform.position).normalized * 2500);
             ball.SetPlayer(null);
         }
@@ -157,12 +157,12 @@ public class RedPlayer : MonoBehaviour
         if (success)
         {
             //get rid of the enemy in a simple way
-            EnemyBody.AddForce(0, 0, 1000);
+            EnemyBody.AddForce(-1000, 0, -1000);
             BallBody.AddForce(50, 0, 0);
         }
         else
         {
-            //Debug.Log(Enemy.ToString());
+            ////Debug.Log(Enemy.ToString());
             //loses ball control
             ball.SetPlayer(Enemy);
         }
@@ -186,7 +186,7 @@ public class RedPlayer : MonoBehaviour
     {
         if (MoreEnemiesAround() & !CanIPass())
         {
-            //Debug.Log("Red HardDribble");
+            ////Debug.Log("Red HardDribble");
             Skill -= 1;
             TryDribble();
             Skill += 1;
@@ -200,19 +200,19 @@ public class RedPlayer : MonoBehaviour
 
     private void PrintAdvance()
     {
-        Debug.Log(gameObject.ToString() + "BallControl = "+ BallControl());
+        //Debug.Log(gameObject.ToString() + "BallControl = "+ BallControl());
     }
     private void PrintSupport()
     {
-        Debug.Log(gameObject.ToString() + "BallToMate = " + BallToMate());
+        //Debug.Log(gameObject.ToString() + "BallToMate = " + BallToMate());
     }
     private void PrintBacking()
     {
-        Debug.Log(gameObject.ToString() + "Backing - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
+        //Debug.Log(gameObject.ToString() + "Backing - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
     }
     private void PrintChase()
     {
-        Debug.Log(gameObject.ToString() + "Chase - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
+        //Debug.Log(gameObject.ToString() + "Chase - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
     }
 
     void Start()

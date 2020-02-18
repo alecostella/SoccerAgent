@@ -6,7 +6,7 @@ public class BluePlayer : MonoBehaviour
 {
     public BelongsTo ball = null;
     public Rigidbody BallBody = null;
-    public int DangerRange = 1;
+    public int DangerRange = 5;
     private Rigidbody rb;
     private Vector3 BluePos;
     private Vector3 RedPos;
@@ -23,7 +23,7 @@ public class BluePlayer : MonoBehaviour
         int enemies = 0;
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("RedPlayer"))
         {
-            if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange && go.transform.position.x < gameObject.transform.position.x)   enemies += 1;
+            if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange && go.transform.position.x < gameObject.transform.position.x) enemies += 1;
         }
         return enemies;
     }
@@ -31,7 +31,7 @@ public class BluePlayer : MonoBehaviour
     private bool BallInSight()
     {
         bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
-        Debug.Log(hit.transform.name);
+        //Debug.Log(hit.transform.name);
         return (ray && hit.transform == ball.player.transform);
     }
 
@@ -160,13 +160,12 @@ public class BluePlayer : MonoBehaviour
         if (success)
         {
             //get rid of the enemy in a simple way
-            EnemyBody.AddForce(0, 0, 1000);
+            EnemyBody.AddForce(1000, 0, 1000);
             BallBody.AddForce(-50, 0, 0);
         }
         else
         {
-            //Debug.Log(Enemy.ToString());
-            //loses ball control
+            Debug.Log(Enemy.ToString());
             ball.SetPlayer(Enemy);
         }
     }
