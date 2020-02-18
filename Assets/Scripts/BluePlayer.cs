@@ -31,7 +31,7 @@ public class BluePlayer : MonoBehaviour
     private bool BallInSight()
     {
         Vector3 vector = new Vector3(0, 0.9f, 0);
-        bool ray = Physics.Raycast(gameObject.transform.position + vector, BallBody.position + vector - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 0);
+        bool ray = Physics.Raycast(gameObject.transform.position + vector, BallBody.position - vector - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
         return (ray);
         // && hit.transform == BallBody.transform
     }
