@@ -30,9 +30,13 @@ public class RedPlayer : MonoBehaviour
 
     private bool BallInSight()
     {
-        bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
-        //Debug.Log(hit.transform.name);
-        return (ray && hit.transform == ball.player.transform);
+        if (ball.player != null)
+        {
+            bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
+            return (ray && hit.transform == ball.player.transform);
+        }
+        else ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
+        return (ray && hit.transform == BallBody.transform);
     }
 
     private bool GoalInSight()
@@ -64,6 +68,7 @@ public class RedPlayer : MonoBehaviour
     //actual actions
     private void BringBallAhead() { ////Debug.Log("BringBallAhead");
         ApplyForceToReachVelocity(rb, new Vector3(8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(8, 0, 0), 20);
+        if ((gameObject.transform.position - BallBody.transform.position).magnitude > DangerRange) ball.SetPlayer(null);
     }
     private void RetreatToBall() { ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20); }
     private void ChaseBall()

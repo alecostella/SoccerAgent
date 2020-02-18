@@ -30,14 +30,21 @@ public class BluePlayer : MonoBehaviour
 
     private bool BallInSight()
     {
-        bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
-        //Debug.Log(hit.transform.name);
-        return (ray && hit.transform == ball.player.transform);
+        private bool BallInSight()
+        {
+            if (ball.player != null)
+            {
+                bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
+                return (ray && hit.transform == ball.player.transform);
+            }
+            else ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
+            return (ray && hit.transform == BallBody.transform);
+        }
     }
 
     private bool GoalInSight()
     {
-        bool ray = Physics.Raycast(gameObject.transform.position, RedPos - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
+        bool ray = Physics.Raycast(gameObject.transform.position, RedPos - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
         return (ray && hit.transform.position == RedPos & hit.distance < 40);
     }
 
@@ -64,6 +71,7 @@ public class BluePlayer : MonoBehaviour
     //actual actions
     private void BringBallAhead() { //Debug.Log("BringBallAhead");
         ApplyForceToReachVelocity(rb, new Vector3(-8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(-8, 0, 0), 20);
+        if ((gameObject.transform.position - BallBody.transform.position).magnitude > DangerRange) ball.SetPlayer(null);
     }
     private void RetreatToBall() { ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20); }
     private void ChaseBall()
@@ -277,8 +285,6 @@ public class BluePlayer : MonoBehaviour
         StartCoroutine(Play());
 
     }
-
-    //void Update() { }
 
     //applies the force necessary to reach the desired velocity
     private static void ApplyForceToReachVelocity(Rigidbody rigidbody, Vector3 velocity, float force = 1, ForceMode mode = ForceMode.Force)
