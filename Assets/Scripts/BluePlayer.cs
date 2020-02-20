@@ -24,7 +24,8 @@ public class BluePlayer : MonoBehaviour
         int count = 0;
         foreach (GameObject go in enemies)
         {
-            if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange && go.transform.position.x < gameObject.transform.position.x) count += 1;
+            if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange) count += 1;
+            // && go.transform.position.x < gameObject.transform.position.x
         }
         return count;
     }
