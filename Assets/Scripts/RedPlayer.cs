@@ -16,16 +16,17 @@ public class RedPlayer : MonoBehaviour
     public float reactionTime = 0.1f;
     private bool GoingOnward = false;
     private GameObject[] allies = new GameObject[5];
+    private GameObject[] enemies = new GameObject[5];
 
     //actual conditions
     private int EnemiesInRange()
     {
-        int enemies = 0;
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("BluePlayer"))
+        int count = 0;
+        foreach (GameObject go in enemies)
         {
-            if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange && go.transform.position.x > gameObject.transform.position.x) enemies += 1;
+            if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange && go.transform.position.x > gameObject.transform.position.x) count += 1;
         }
-        return enemies;
+        return count;
     }
 
     private bool BallInSight()
@@ -149,7 +150,7 @@ public class RedPlayer : MonoBehaviour
 
         Rigidbody EnemyBody = null;
         GameObject Enemy = null;
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("BluePlayer"))
+        foreach (GameObject go in enemies)
         {
             if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange)
             {
@@ -231,6 +232,7 @@ public class RedPlayer : MonoBehaviour
         RedPos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;
         BluePos = GameObject.Find("BlueGoal").GetComponent<Rigidbody>().position;
         allies = GameObject.FindGameObjectsWithTag("RedPlayer");
+        enemies = GameObject.FindGameObjectsWithTag("BluePlayer");
         //each player can be average or skilled, setting dribble chance at 50% (meh) or 67% (literally Messi)
         Skill = Rand.Next(1) + 3;
 
