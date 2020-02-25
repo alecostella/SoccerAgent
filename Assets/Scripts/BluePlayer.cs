@@ -170,7 +170,7 @@ public class BluePlayer : MonoBehaviour
         if (success)
         {
             //get rid of the enemy in a simple way
-            EnemyBody.AddForce(1000, 0, 1000);
+            EnemyBody.AddForce(1000, 0, -1000);
             BallBody.AddForce(-50, 0, 0);
         }
         else

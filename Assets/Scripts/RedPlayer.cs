@@ -149,6 +149,8 @@ public class RedPlayer : MonoBehaviour
         if (!OneEnemyAround()) return;
         bool success = Rand.Next(5) <= Skill;
 
+        Debug.Log("Dribbling: " + success);
+
         Rigidbody EnemyBody = null;
         GameObject Enemy = null;
         foreach (GameObject go in enemies)
@@ -167,12 +169,12 @@ public class RedPlayer : MonoBehaviour
         if (success)
         {
             //get rid of the enemy in a simple way
-            EnemyBody.AddForce(-1000, 0, -1000);
+            EnemyBody.AddForce(-1000, 0, 1000);
             BallBody.AddForce(50, 0, 0);
         }
         else
         {
-            ////Debug.Log(Enemy.ToString());
+            Debug.Log(Enemy.ToString());
             //loses ball control
             ball.SetPlayer(Enemy);
         }
