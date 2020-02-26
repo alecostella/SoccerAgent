@@ -40,6 +40,7 @@ public class RedPlayer : MonoBehaviour
         else
         {
             bool ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
+            Debug.Log("ray = " + ray + " hit = " + hit.collider.gameObject.name);
             return (ray && hit.transform == BallBody.transform);
         }
     }
@@ -72,7 +73,14 @@ public class RedPlayer : MonoBehaviour
 
     //actual actions
     private void BringBallAhead() { ////Debug.Log("BringBallAhead");
-        ApplyForceToReachVelocity(rb, new Vector3(8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(8, 0, 0), 20);
+        if (gameObject.transform.position.z < 50 || gameObject.transform.position.z > -50)
+        {
+            ApplyForceToReachVelocity(rb, new Vector3(8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(8, 0, 0), 20);
+        }
+        else
+        {
+            ApplyForceToReachVelocity(rb, BluePos - gameObject.transform.position, 20); ApplyForceToReachVelocity(BallBody, BluePos - gameObject.transform.position, 20);
+        }
         if ((gameObject.transform.position - BallBody.transform.position).magnitude > DangerRange) ball.SetPlayer(null);
     }
     private void RetreatToBall() { ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20); }
