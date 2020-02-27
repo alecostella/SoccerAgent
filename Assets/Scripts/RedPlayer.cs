@@ -34,13 +34,15 @@ public class RedPlayer : MonoBehaviour
     {
         if (ball.player != null)
         {
-            bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
+            bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
             return (ray && hit.transform == ball.player.transform);
         }
         else
         {
-            bool ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
-            Debug.Log("ray = " + ray + " hit = " + hit.collider.gameObject.name);
+            Vector3 vector = gameObject.transform.position + new Vector3(0, 0.9f, 0);
+            bool ray = Physics.Raycast(vector, BallBody.transform.position - vector, out RaycastHit hit, Mathf.Infinity, 0);
+            Debug.Log("BallInSight: ray = " + ray);
+            if (ray) Debug.Log("hit = " + hit.collider.gameObject.name);
             return (ray && hit.transform == BallBody.transform);
         }
     }
@@ -48,6 +50,7 @@ public class RedPlayer : MonoBehaviour
     private bool GoalInSight()
     {
         bool ray = Physics.Raycast(gameObject.transform.position, RedPos - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
+        Debug.Log("GoalInSight: ray = " + ray + " distance = " + hit.distance + " hit = " + hit.transform.name);
         return (ray && hit.transform.position == RedPos & hit.distance < 40);
     }
 
@@ -73,7 +76,7 @@ public class RedPlayer : MonoBehaviour
 
     //actual actions
     private void BringBallAhead() { ////Debug.Log("BringBallAhead");
-        if (gameObject.transform.position.z < 50 || gameObject.transform.position.z > -50)
+        if (gameObject.transform.position.z < 50 || gameObject.transform.position.z > -50 || gameObject.transform.position.x > 80)
         {
             ApplyForceToReachVelocity(rb, new Vector3(8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(8, 0, 0), 20);
         }
