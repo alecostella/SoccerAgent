@@ -6,15 +6,16 @@ public class BluePlayer : MonoBehaviour
 {
     public BelongsTo ball = null;
     public Rigidbody BallBody = null;
-    public int DangerRange = 5;
+    public float reactionTime = 0.1f;
+    public int DangerRange = 15;
+    private int Skill;
+    private bool GoingOnward = false;
     private Rigidbody rb;
     private Vector3 BluePos;
     private Vector3 RedPos;
-    private readonly System.Random Rand = new System.Random();
-    private int Skill;
     private FSM fsm;
-    public float reactionTime = 0.1f;
-    private bool GoingOnward = false;
+    private Collider collider;
+    private readonly System.Random Rand = new System.Random();
     private GameObject[] allies = new GameObject[5];
     private GameObject[] enemies = new GameObject[5];
 
@@ -88,7 +89,18 @@ public class BluePlayer : MonoBehaviour
         }
         if ((gameObject.transform.position - BallBody.transform.position).magnitude > DangerRange) ball.SetPlayer(null);
     }
-    private void RetreatToBall() { ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20); }
+    private void RetreatToGoal()
+    {
+        float meanX = 0f;
+        foreach (GameObject go in allies)
+        {
+            meanX += go.transform.position.x;
+        }
+        meanX /= 5;
+
+        ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
+        
+    }
     private void ChaseBall()
     {
         ApplyForceToReachVelocity(rb, (BallBody.position - gameObject.transform.position).normalized * 10, 30);
@@ -241,6 +253,7 @@ public class BluePlayer : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        collider = GetComponent<Collider>();
         if (!BallBody) return;
 
         RedPos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;
@@ -263,8 +276,8 @@ public class BluePlayer : MonoBehaviour
         SupportAdv.stayActions.Add(ReachPosition);
 
         FSMState Backing = new FSMState();
-        Backing.enterActions.Add(RetreatToBall);
-        Backing.stayActions.Add(RetreatToBall);
+        Backing.enterActions.Add(RetreatToGoal);
+        Backing.stayActions.Add(RetreatToGoal);
 
         FSMState Chase = new FSMState();
         Chase.enterActions.Add(ChaseBall);

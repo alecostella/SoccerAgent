@@ -6,13 +6,14 @@ public class RedPlayer : MonoBehaviour
 {
     public BelongsTo ball = null;
     public Rigidbody BallBody = null;
-    public int DangerRange = 5;
+    public int DangerRange = 15;
     private Rigidbody rb;
     private Vector3 BluePos;
     private Vector3 RedPos;
     private readonly System.Random Rand = new System.Random();
     private int Skill;
     private FSM fsm;
+    private Collider collider;
     public float reactionTime = 0.1f;
     private bool GoingOnward = false;
     private GameObject[] allies = new GameObject[5];
@@ -241,6 +242,7 @@ public class RedPlayer : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        collider = GetComponent<Collider>();
         if (!BallBody) return;
 
         RedPos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;
