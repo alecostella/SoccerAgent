@@ -13,7 +13,7 @@ public class RedPlayer : MonoBehaviour
     private readonly System.Random Rand = new System.Random();
     private int Skill;
     private FSM fsm;
-    private Collider collider;
+    private Collider coll;
     public float reactionTime = 0.1f;
     private bool GoingOnward = false;
     private GameObject[] allies = new GameObject[5];
@@ -242,7 +242,7 @@ public class RedPlayer : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        collider = GetComponent<Collider>();
+        coll = GetComponent<Collider>();
         if (!BallBody) return;
 
         RedPos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;

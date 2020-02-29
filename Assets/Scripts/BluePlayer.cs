@@ -14,7 +14,7 @@ public class BluePlayer : MonoBehaviour
     private Vector3 BluePos;
     private Vector3 RedPos;
     private FSM fsm;
-    private Collider collider;
+    private Collider coll;
     private readonly System.Random Rand = new System.Random();
     private GameObject[] allies = new GameObject[5];
     private GameObject[] enemies = new GameObject[5];
@@ -97,9 +97,21 @@ public class BluePlayer : MonoBehaviour
             meanX += go.transform.position.x;
         }
         meanX /= 5;
+        float limitX;
+        float originZ = gameObject.transform.position.z;
+        float signX = (gameObject.transform.position.x - meanX) / Math.Abs(gameObject.transform.position.x - meanX);
+        float signZ = (originZ - gameObject.transform.position.z) / Math.Abs(originZ - gameObject.transform.position.z);
 
-        ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
-        
+        if (signX > 0) limitX = 80;
+        else limitX = 60;
+
+        if (gameObject.transform.position.x < limitX) ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
+        else Oscillate(originZ, signZ);
+    }
+    private void Oscillate(float originZ, float signZ)
+    {
+        float max = Math.Max(Math.Abs(originZ - gameObject.transform.position.z), 10);
+        rb.AddForce(new Vector3(0, 0, max * signZ));
     }
     private void ChaseBall()
     {
@@ -253,7 +265,7 @@ public class BluePlayer : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        collider = GetComponent<Collider>();
+        coll = GetComponent<Collider>();
         if (!BallBody) return;
 
         RedPos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;
