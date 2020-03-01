@@ -87,241 +87,270 @@ public class RedPlayer : MonoBehaviour
         }
         if ((gameObject.transform.position - BallBody.transform.position).magnitude > DangerRange) ball.SetPlayer(null);
     }
-    private void RetreatToBall() { ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20); }
-    private void ChaseBall()
+    private void RetreatToGoal()
     {
-        ApplyForceToReachVelocity(rb, (BallBody.position - gameObject.transform.position).normalized * 10, 30);
-        CatchBall();
-    }
-    private void SpeedRun() { if ((gameObject.transform.position - BallBody.transform.position).magnitude <= 2 * DangerRange) rb.AddForce((RedPos - gameObject.transform.position).normalized * 30); }
-    private void ShootBall()
-    {
-        if (!GoalInSight()) return;
-        ////Debug.Log("Provo a tirare");
-        BallBody.AddForce((BluePos - gameObject.transform.position).normalized * 2500);
-        ball.SetPlayer(null);
-    }
-
-    private GameObject LookForAlly()
-    {
-        GameObject target = null;
+        float meanX = 0f;
         foreach (GameObject go in allies)
         {
-            float highestX = -10000;
-            if (go.transform.position != gameObject.transform.position)
-            {
-                bool ray = Physics.Raycast(gameObject.transform.position, go.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
-                if (go.transform == hit.transform & hit.transform.position.x > highestX) { target = go; }
-            }
+            meanX += go.transform.position.x;
         }
-        return target;
-    }
+        meanX /= 5;
 
-    private void PassTheBall()
+        float limitX;
+        float originZ = gameObject.transform.position.z;
+        float signX;
+
+        if (meanX > gameObject.transform.position.x) signX = -1;
+        else signX = 1;
+
+        if (signX > 0) limitX = -60;
+        else limitX = -80;
+
+        if (gameObject.transform.position.x < limitX) ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
+        else Oscillate(originZ);
+    }
+    private void Oscillate(float originZ)
     {
-        if (MoreEnemiesAround() & CanIPass())
+        float signZ;
+        float max = Math.Max(Math.Abs(originZ - gameObject.transform.position.z), 10);
+        if (originZ > gameObject.transform.position.x) signZ = -1;
+        else signZ = 1;
+        rb.AddForce(new Vector3(0, 0, max * signZ));
+    }
+    private void ChaseBall()
         {
-            GameObject receiver = LookForAlly();
-            ////Debug.Log("Passo a" + receiver.ToString());
-            BallBody.AddForce((receiver.transform.position - gameObject.transform.position).normalized * 2500);
+            ApplyForceToReachVelocity(rb, (BallBody.position - gameObject.transform.position).normalized * 10, 30);
+            CatchBall();
+        }
+        private void SpeedRun() { if ((gameObject.transform.position - BallBody.transform.position).magnitude <= 2 * DangerRange) rb.AddForce((RedPos - gameObject.transform.position).normalized * 30); }
+        private void ShootBall()
+        {
+            if (!GoalInSight()) return;
+            ////Debug.Log("Provo a tirare");
+            BallBody.AddForce((BluePos - gameObject.transform.position).normalized * 2500);
             ball.SetPlayer(null);
         }
-    }
 
-    private void ReachPosition()
-    {
-        if (gameObject.transform.position.x <= 60)
+        private GameObject LookForAlly()
         {
-            float meanZ = 0;
+            GameObject target = null;
             foreach (GameObject go in allies)
             {
-                meanZ += go.transform.position.z;
+                float highestX = -10000;
+                if (go.transform.position != gameObject.transform.position)
+                {
+                    bool ray = Physics.Raycast(gameObject.transform.position, go.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
+                    if (go.transform == hit.transform & hit.transform.position.x > highestX) { target = go; }
+                }
             }
-            meanZ /= 5;
-            float sign = (gameObject.transform.position.z - meanZ) / Math.Abs(gameObject.transform.position.z - meanZ);
-            ApplyForceToReachVelocity(rb, (new Vector3(60, 0, -50 * sign) - gameObject.transform.position).normalized * 10, 20);
+            return target;
         }
-        else
+
+        private void PassTheBall()
         {
-            Strafing();
-        }
-    }
-
-    public IEnumerator Play()
-    {
-        while (true)
-        {
-            fsm.Update();
-            yield return new WaitForSeconds(reactionTime);
-        }
-    }
-
-    private void TryDribble()
-    {
-        if (!OneEnemyAround()) return;
-        bool success = Rand.Next(5) <= Skill;
-
-        Debug.Log("Dribbling: " + success);
-
-        Rigidbody EnemyBody = null;
-        GameObject Enemy = null;
-        foreach (GameObject go in enemies)
-        {
-            if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange)
+            if (MoreEnemiesAround() & CanIPass())
             {
-                Enemy = go;
-                EnemyBody = go.GetComponent<Rigidbody>();
-                break;
+                GameObject receiver = LookForAlly();
+                ////Debug.Log("Passo a" + receiver.ToString());
+                BallBody.AddForce((receiver.transform.position - gameObject.transform.position).normalized * 2500);
+                ball.SetPlayer(null);
             }
         }
 
-        //the player dashes in any case
-        rb.AddForce(50, 0, 0);
-
-        if (success)
+        private void ReachPosition()
         {
-            //get rid of the enemy in a simple way
-            EnemyBody.AddForce(-1000, 0, 1000);
-            BallBody.AddForce(50, 0, 0);
+            if (gameObject.transform.position.x <= 60)
+            {
+                float meanZ = 0;
+                foreach (GameObject go in allies)
+                {
+                    meanZ += go.transform.position.z;
+                }
+                meanZ /= 5;
+                float sign = (gameObject.transform.position.z - meanZ) / Math.Abs(gameObject.transform.position.z - meanZ);
+                ApplyForceToReachVelocity(rb, (new Vector3(60, 0, -50 * sign) - gameObject.transform.position).normalized * 10, 20);
+            }
+            else
+            {
+                Strafing();
+            }
         }
-        else
+
+        public IEnumerator Play()
         {
-            Debug.Log(Enemy.ToString());
-            //loses ball control
-            ball.SetPlayer(Enemy);
+            while (true)
+            {
+                fsm.Update();
+                yield return new WaitForSeconds(reactionTime);
+            }
         }
-    }
 
-    private void Strafing()
-    {
-        if (!GoingOnward)
+        private void TryDribble()
         {
-            ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
-            if (gameObject.transform.position.x <= 60) { GoingOnward = true; }
+            if (!OneEnemyAround()) return;
+            bool success = Rand.Next(5) <= Skill;
+
+            Debug.Log("Dribbling: " + success);
+
+            Rigidbody EnemyBody = null;
+            GameObject Enemy = null;
+            foreach (GameObject go in enemies)
+            {
+                if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange)
+                {
+                    Enemy = go;
+                    EnemyBody = go.GetComponent<Rigidbody>();
+                    break;
+                }
+            }
+
+            //the player dashes in any case
+            rb.AddForce(50, 0, 0);
+
+            if (success)
+            {
+                //get rid of the enemy in a simple way
+                EnemyBody.AddForce(-1000, 0, 1000);
+                BallBody.AddForce(50, 0, 0);
+            }
+            else
+            {
+                Debug.Log(Enemy.ToString());
+                //loses ball control
+                ball.SetPlayer(Enemy);
+            }
         }
-        else
+
+        private void Strafing()
         {
-            ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20);
-            if (gameObject.transform.position.x >= 80) { GoingOnward = false; }
+            if (!GoingOnward)
+            {
+                ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
+                if (gameObject.transform.position.x <= 60) { GoingOnward = true; }
+            }
+            else
+            {
+                ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20);
+                if (gameObject.transform.position.x >= 80) { GoingOnward = false; }
+            }
         }
-    }
 
-    private void HardDribble()
-    {
-        if (MoreEnemiesAround() & !CanIPass())
+        private void HardDribble()
         {
-            ////Debug.Log("Red HardDribble");
-            Skill -= 1;
-            TryDribble();
-            Skill += 1;
+            if (MoreEnemiesAround() & !CanIPass())
+            {
+                ////Debug.Log("Red HardDribble");
+                Skill -= 1;
+                TryDribble();
+                Skill += 1;
+            }
         }
-    }
 
-    private void CatchBall()
-    {
-        if ((BallBody.transform.position - gameObject.transform.position).magnitude <= 1.5 && ball.player == null) { ball.SetPlayer(gameObject); }
-    }
-
-    private void PrintAdvance()
-    {
-        //Debug.Log(gameObject.ToString() + "BallControl = "+ BallControl());
-    }
-    private void PrintSupport()
-    {
-        //Debug.Log(gameObject.ToString() + "BallToMate = " + BallToMate());
-    }
-    private void PrintBacking()
-    {
-        //Debug.Log(gameObject.ToString() + "Backing - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
-    }
-    private void PrintChase()
-    {
-        //Debug.Log(gameObject.ToString() + "Chase - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
-    }
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        coll = GetComponent<Collider>();
-        if (!BallBody) return;
-
-        RedPos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;
-        BluePos = GameObject.Find("BlueGoal").GetComponent<Rigidbody>().position;
-        allies = GameObject.FindGameObjectsWithTag("RedPlayer");
-        enemies = GameObject.FindGameObjectsWithTag("BluePlayer");
-        //each player can be average or skilled, setting dribble chance at 50% (meh) or 67% (literally Messi)
-        Skill = Rand.Next(1) + 3;
-
-        FSMState Advance = new FSMState();
-        Advance.enterActions.Add(BringBallAhead);
-        Advance.stayActions.Add(BringBallAhead);
-        Advance.stayActions.Add(TryDribble);
-        Advance.stayActions.Add(HardDribble);
-        Advance.stayActions.Add(ShootBall);
-        Advance.stayActions.Add(PassTheBall);
-
-        FSMState SupportAdv = new FSMState();
-        SupportAdv.enterActions.Add(ReachPosition);
-        SupportAdv.stayActions.Add(ReachPosition);
-
-        FSMState Backing = new FSMState();
-        Backing.enterActions.Add(RetreatToBall);
-        Backing.stayActions.Add(RetreatToBall);
-
-        FSMState Chase = new FSMState();
-        Chase.enterActions.Add(ChaseBall);
-        Chase.stayActions.Add(ChaseBall);
-        Chase.stayActions.Add(SpeedRun);
-
-        Advance.enterActions.Add(PrintAdvance);
-        SupportAdv.enterActions.Add(PrintSupport);
-        Backing.enterActions.Add(PrintBacking);
-        Chase.enterActions.Add(PrintChase);
-
-        FSMTransition t1 = new FSMTransition(BallControl);
-        FSMTransition t2 = new FSMTransition(BallToMate);
-        FSMTransition t3 = new FSMTransition(EnemyBall);
-        FSMTransition t4 = new FSMTransition(BallInSight);
-        FSMTransition t5 = new FSMTransition(BallNotInSight);
-
-        Advance.AddTransition(t2, SupportAdv);
-        Advance.AddTransition(t3, Chase);
-        SupportAdv.AddTransition(t1, Advance);
-        SupportAdv.AddTransition(t3, Backing);
-        Chase.AddTransition(t1, Advance);
-        Chase.AddTransition(t5, Backing);
-        Chase.AddTransition(t2, SupportAdv);
-        Backing.AddTransition(t4, Chase);
-        Backing.AddTransition(t2, SupportAdv);
-
-        FSMState Starting = new FSMState();
-        Starting.AddTransition(t1, Advance);
-        Starting.AddTransition(t2, SupportAdv);
-        Starting.AddTransition(t3, Backing);
-
-        fsm = new FSM(Starting);
-        StartCoroutine(Play());
-
-    }
-
-    //applies the force necessary to reach the desired velocity
-    private static void ApplyForceToReachVelocity(Rigidbody rigidbody, Vector3 velocity, float force = 1, ForceMode mode = ForceMode.Force)
-    {
-        if (force == 0 || velocity.magnitude == 0)
-            return;
-
-        velocity += velocity.normalized * 0.2f * rigidbody.drag;
-
-        force = Mathf.Clamp(force, -rigidbody.mass / Time.fixedDeltaTime, rigidbody.mass / Time.fixedDeltaTime);
-
-        if (rigidbody.velocity.magnitude == 0)
+        private void CatchBall()
         {
-            rigidbody.AddForce(velocity * force, mode);
+            if ((BallBody.transform.position - gameObject.transform.position).magnitude <= 1.5 && ball.player == null) { ball.SetPlayer(gameObject); }
         }
-        else
+
+        private void PrintAdvance()
         {
-            var velocityProjectedToTarget = (velocity.normalized * Vector3.Dot(velocity, rigidbody.velocity) / velocity.magnitude);
-            rigidbody.AddForce((velocity - velocityProjectedToTarget) * force, mode);
+            //Debug.Log(gameObject.ToString() + "BallControl = "+ BallControl());
+        }
+        private void PrintSupport()
+        {
+            //Debug.Log(gameObject.ToString() + "BallToMate = " + BallToMate());
+        }
+        private void PrintBacking()
+        {
+            //Debug.Log(gameObject.ToString() + "Backing - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
+        }
+        private void PrintChase()
+        {
+            //Debug.Log(gameObject.ToString() + "Chase - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
+        }
+
+        void Start()
+        {
+            rb = GetComponent<Rigidbody>();
+            coll = GetComponent<Collider>();
+            if (!BallBody) return;
+
+            RedPos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;
+            BluePos = GameObject.Find("BlueGoal").GetComponent<Rigidbody>().position;
+            allies = GameObject.FindGameObjectsWithTag("RedPlayer");
+            enemies = GameObject.FindGameObjectsWithTag("BluePlayer");
+            //each player can be average or skilled, setting dribble chance at 50% (meh) or 67% (literally Messi)
+            Skill = Rand.Next(1) + 3;
+
+            FSMState Advance = new FSMState();
+            Advance.enterActions.Add(BringBallAhead);
+            Advance.stayActions.Add(BringBallAhead);
+            Advance.stayActions.Add(TryDribble);
+            Advance.stayActions.Add(HardDribble);
+            Advance.stayActions.Add(ShootBall);
+            Advance.stayActions.Add(PassTheBall);
+
+            FSMState SupportAdv = new FSMState();
+            SupportAdv.enterActions.Add(ReachPosition);
+            SupportAdv.stayActions.Add(ReachPosition);
+
+            FSMState Backing = new FSMState();
+            Backing.enterActions.Add(RetreatToGoal);
+            Backing.stayActions.Add(RetreatToGoal);
+
+            FSMState Chase = new FSMState();
+            Chase.enterActions.Add(ChaseBall);
+            Chase.stayActions.Add(ChaseBall);
+            Chase.stayActions.Add(SpeedRun);
+
+            Advance.enterActions.Add(PrintAdvance);
+            SupportAdv.enterActions.Add(PrintSupport);
+            Backing.enterActions.Add(PrintBacking);
+            Chase.enterActions.Add(PrintChase);
+
+            FSMTransition t1 = new FSMTransition(BallControl);
+            FSMTransition t2 = new FSMTransition(BallToMate);
+            FSMTransition t3 = new FSMTransition(EnemyBall);
+            FSMTransition t4 = new FSMTransition(BallInSight);
+            FSMTransition t5 = new FSMTransition(BallNotInSight);
+
+            Advance.AddTransition(t2, SupportAdv);
+            Advance.AddTransition(t3, Chase);
+            SupportAdv.AddTransition(t1, Advance);
+            SupportAdv.AddTransition(t3, Backing);
+            Chase.AddTransition(t1, Advance);
+            Chase.AddTransition(t5, Backing);
+            Chase.AddTransition(t2, SupportAdv);
+            Backing.AddTransition(t4, Chase);
+            Backing.AddTransition(t2, SupportAdv);
+
+            FSMState Starting = new FSMState();
+            Starting.AddTransition(t1, Advance);
+            Starting.AddTransition(t2, SupportAdv);
+            Starting.AddTransition(t3, Backing);
+
+            fsm = new FSM(Starting);
+            StartCoroutine(Play());
+
+        }
+
+        //applies the force necessary to reach the desired velocity
+        private static void ApplyForceToReachVelocity(Rigidbody rigidbody, Vector3 velocity, float force = 1, ForceMode mode = ForceMode.Force)
+        {
+            if (force == 0 || velocity.magnitude == 0)
+                return;
+
+            velocity += velocity.normalized * 0.2f * rigidbody.drag;
+
+            force = Mathf.Clamp(force, -rigidbody.mass / Time.fixedDeltaTime, rigidbody.mass / Time.fixedDeltaTime);
+
+            if (rigidbody.velocity.magnitude == 0)
+            {
+                rigidbody.AddForce(velocity * force, mode);
+            }
+            else
+            {
+                var velocityProjectedToTarget = (velocity.normalized * Vector3.Dot(velocity, rigidbody.velocity) / velocity.magnitude);
+                rigidbody.AddForce((velocity - velocityProjectedToTarget) * force, mode);
+            }
         }
     }
-}

@@ -97,20 +97,26 @@ public class BluePlayer : MonoBehaviour
             meanX += go.transform.position.x;
         }
         meanX /= 5;
+
         float limitX;
         float originZ = gameObject.transform.position.z;
-        float signX = (gameObject.transform.position.x - meanX) / Math.Abs(gameObject.transform.position.x - meanX);
-        float signZ = (originZ - gameObject.transform.position.z) / Math.Abs(originZ - gameObject.transform.position.z);
+        float signX;
+
+        if (meanX > gameObject.transform.position.x) signX = -1;
+        else signX = 1;
 
         if (signX > 0) limitX = 80;
         else limitX = 60;
 
         if (gameObject.transform.position.x < limitX) ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
-        else Oscillate(originZ, signZ);
+        else Oscillate(originZ);
     }
-    private void Oscillate(float originZ, float signZ)
+    private void Oscillate(float originZ)
     {
+        float signZ;
         float max = Math.Max(Math.Abs(originZ - gameObject.transform.position.z), 10);
+        if (originZ > gameObject.transform.position.x) signZ = -1;
+        else signZ = 1;
         rb.AddForce(new Vector3(0, 0, max * signZ));
     }
     private void ChaseBall()
