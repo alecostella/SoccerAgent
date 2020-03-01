@@ -41,7 +41,7 @@ public class RedPlayer : MonoBehaviour
         else
         {
             Vector3 vector = gameObject.transform.position + new Vector3(0, 0.9f, 0);
-            bool ray = Physics.Raycast(vector, BallBody.transform.position - vector, out RaycastHit hit, Mathf.Infinity, 0);
+            bool ray = Physics.Raycast(vector, BallBody.transform.position - vector, out RaycastHit hit, Mathf.Infinity);
             Debug.Log("BallInSight: ray = " + ray);
             if (ray) Debug.Log("hit = " + hit.collider.gameObject.name);
             return (ray && hit.transform == BallBody.transform);
@@ -77,17 +77,19 @@ public class RedPlayer : MonoBehaviour
 
     //actual actions
     private void BringBallAhead() { ////Debug.Log("BringBallAhead");
-        if (gameObject.transform.position.z < 50 || gameObject.transform.position.z > -50 || gameObject.transform.position.x > 80)
-        {
-            ApplyForceToReachVelocity(rb, new Vector3(8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(8, 0, 0), 20);
-        }
-        else
-        {
-            ApplyForceToReachVelocity(rb, BluePos - gameObject.transform.position, 20); ApplyForceToReachVelocity(BallBody, BluePos - gameObject.transform.position, 20);
-        }
+        //if (gameObject.transform.position.z < 50 || gameObject.transform.position.z > -50 || gameObject.transform.position.x < -80)
+        //{
+        //ApplyForceToReachVelocity(rb, new Vector3(-8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(-8, 0, 0), 20);
+        //}
+        //else
+        //{
+        Vector3 vector = (BluePos - gameObject.transform.position).normalized * 10;
+        ApplyForceToReachVelocity(rb, vector, 20); ApplyForceToReachVelocity(BallBody, vector, 20);
+        //}
         if ((gameObject.transform.position - BallBody.transform.position).magnitude > DangerRange) ball.SetPlayer(null);
     }
     private void RetreatToGoal()
+
     {
         float meanX = 0f;
         foreach (GameObject go in allies)
@@ -115,7 +117,7 @@ public class RedPlayer : MonoBehaviour
         float max = Math.Max(Math.Abs(originZ - gameObject.transform.position.z), 10);
         if (originZ > gameObject.transform.position.x) signZ = -1;
         else signZ = 1;
-        rb.AddForce(new Vector3(0, 0, max * signZ));
+        rb.AddForce(new Vector3(0, 0, 10 * max * signZ));
     }
     private void ChaseBall()
         {
