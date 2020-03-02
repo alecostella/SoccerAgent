@@ -78,15 +78,8 @@ public class BluePlayer : MonoBehaviour
     //actual actions
     private void BringBallAhead()
     {
-        //if (gameObject.transform.position.z < 50 || gameObject.transform.position.z > -50 || gameObject.transform.position.x < -80)
-        //{
-        //ApplyForceToReachVelocity(rb, new Vector3(-8, 0, 0), 20); ApplyForceToReachVelocity(BallBody, new Vector3(-8, 0, 0), 20);
-        //}
-        //else
-        //{
         Vector3 vector = (RedPos - gameObject.transform.position).normalized*10;
         ApplyForceToReachVelocity(rb, vector, 20); ApplyForceToReachVelocity(BallBody, vector, 20);
-        //}
         if ((gameObject.transform.position - BallBody.transform.position).magnitude > DangerRange) ball.SetPlayer(null);
     }
     private void RetreatToGoal()
@@ -213,7 +206,7 @@ public class BluePlayer : MonoBehaviour
         if (success)
         {
             //get rid of the enemy in a simple way
-            EnemyBody.AddForce(1000, 0, -1000);
+            EnemyBody.AddForce(0, 0, -1000);
             BallBody.AddForce(-50, 0, 0);
         }
         else
