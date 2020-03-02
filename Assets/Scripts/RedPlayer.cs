@@ -40,8 +40,8 @@ public class RedPlayer : MonoBehaviour
         }
         else
         {
-            Vector3 vector = gameObject.transform.position + new Vector3(0, 0.9f, 0);
-            bool ray = Physics.Raycast(vector, BallBody.transform.position - vector, out RaycastHit hit, Mathf.Infinity);
+            //Vector3 vector = gameObject.transform.position + new Vector3(0, 0.9f, 0);
+            bool ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
             Debug.Log("BallInSight: ray = " + ray);
             if (ray) Debug.Log("hit = " + hit.collider.gameObject.name);
             return (ray && hit.transform == BallBody.transform);
@@ -102,7 +102,7 @@ public class RedPlayer : MonoBehaviour
         if (signX > 0) limitX = -60;
         else limitX = -80;
 
-        if (gameObject.transform.position.x > limitX) ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
+        if (gameObject.transform.position.x > limitX) ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20);
         else Oscillate(originZ);
     }
     private void Oscillate(float originZ)
@@ -111,7 +111,7 @@ public class RedPlayer : MonoBehaviour
         float max = Math.Max(Math.Abs(originZ - gameObject.transform.position.z), 10);
         if (originZ > gameObject.transform.position.x) signZ = -1;
         else signZ = 1;
-        rb.AddForce(new Vector3(0, 0, 10 * max * signZ));
+        rb.AddForce(new Vector3(0, 0, -10 * max * signZ));
     }
     private void ChaseBall()
         {
