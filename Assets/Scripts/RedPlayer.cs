@@ -107,11 +107,12 @@ public class RedPlayer : MonoBehaviour
     }
     private void Oscillate(float originZ)
     {
-        float signZ;
-        float max = Math.Max(Math.Abs(originZ - gameObject.transform.position.z), 10);
-        if (originZ > gameObject.transform.position.x) signZ = -1;
-        else signZ = 1;
-        rb.AddForce(new Vector3(0, 0, -10 * max * signZ));
+        rb.AddForce(0, 0, Mathf.Cos(Time.time * 10 / Mathf.PI) * 100);
+        //float signZ;
+        //float max = Math.Max(Math.Abs(originZ - gameObject.transform.position.z), 10);
+        //if (originZ > gameObject.transform.position.z) signZ = -1;
+        //else signZ = 1;
+        //rb.AddForce(new Vector3(0, 0, 10 * max * signZ));
     }
     private void ChaseBall()
         {
