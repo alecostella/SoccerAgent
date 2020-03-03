@@ -6,16 +6,15 @@ public class RedPlayer : MonoBehaviour
 {
     public BelongsTo ball = null;
     public Rigidbody BallBody = null;
+    public float reactionTime = 0.1f;
     public int DangerRange = 15;
-    private Rigidbody rb;
-    private Vector3 BluePos;
-    private Vector3 RedPos;
-    private readonly System.Random Rand = new System.Random();
     private int Skill;
     private FSM fsm;
-    private Collider coll;
-    public float reactionTime = 0.1f;
+    private Rigidbody rb;
+    private Vector3 RedPos;
+    private Vector3 BluePos;
     private bool GoingOnward = false;
+    private readonly System.Random Rand = new System.Random();
     private GameObject[] allies = new GameObject[5];
     private GameObject[] enemies = new GameObject[5];
 
@@ -93,7 +92,7 @@ public class RedPlayer : MonoBehaviour
         meanX /= 5;
 
         float limitX;
-        float originZ = gameObject.transform.position.z;
+        //float originZ = gameObject.transform.position.z;
         float signX;
 
         if (meanX > gameObject.transform.position.x) signX = -1;
@@ -103,11 +102,11 @@ public class RedPlayer : MonoBehaviour
         else limitX = -80;
 
         if (gameObject.transform.position.x > limitX) ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20);
-        else Oscillate(originZ);
+        else Oscillate();
     }
-    private void Oscillate(float originZ)
+    private void Oscillate()
     {
-        rb.AddForce(0, 0, Mathf.Cos(Time.time * 10 / Mathf.PI) * 100);
+        rb.AddForce(0, 0, Mathf.Cos(Time.time * 10 / Mathf.PI) * 500);
         //float signZ;
         //float max = Math.Max(Math.Abs(originZ - gameObject.transform.position.z), 10);
         //if (originZ > gameObject.transform.position.z) signZ = -1;
@@ -148,7 +147,7 @@ public class RedPlayer : MonoBehaviour
             if (MoreEnemiesAround() & CanIPass())
             {
                 GameObject receiver = LookForAlly();
-                ////Debug.Log("Passo a" + receiver.ToString());
+                //Debug.Log("Passo a" + receiver.ToString());
                 BallBody.AddForce((receiver.transform.position - gameObject.transform.position).normalized * 2500);
                 ball.SetPlayer(null);
             }
@@ -236,7 +235,7 @@ public class RedPlayer : MonoBehaviour
         {
             if (MoreEnemiesAround() & !CanIPass())
             {
-                ////Debug.Log("Red HardDribble");
+                //Debug.Log("Red HardDribble");
                 Skill -= 1;
                 TryDribble();
                 Skill += 1;
@@ -268,7 +267,6 @@ public class RedPlayer : MonoBehaviour
         void Start()
         {
             rb = GetComponent<Rigidbody>();
-            coll = GetComponent<Collider>();
             if (!BallBody) return;
 
             RedPos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;

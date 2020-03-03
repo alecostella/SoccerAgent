@@ -63,6 +63,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\ProvaRay.cs" />
+    <Compile Include="Assets\Raycast.cs" />
     <Compile Include="Assets\Scripts\BelongsTo.cs" />
     <Compile Include="Assets\Scripts\BluePlayer.cs" />
     <Compile Include="Assets\Scripts\CubeStates.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="Assets\Scripts\FSMState.cs" />
     <Compile Include="Assets\Scripts\FSMTransition.cs" />
     <Compile Include="Assets\Scripts\RedPlayer.cs" />
+    <Compile Include="Assets\Spostamento.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/Alessandro/Desktop/SoccerAgent/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

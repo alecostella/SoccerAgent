@@ -9,12 +9,11 @@ public class BluePlayer : MonoBehaviour
     public float reactionTime = 0.1f;
     public int DangerRange = 15;
     private int Skill;
-    private bool GoingOnward = false;
-    private Rigidbody rb;
-    private Vector3 BluePos;
-    private Vector3 RedPos;
     private FSM fsm;
-    private Collider coll;
+    private Rigidbody rb;
+    private Vector3 RedPos;
+    private Vector3 BluePos;
+    private bool GoingOnward = false;
     private readonly System.Random Rand = new System.Random();
     private GameObject[] allies = new GameObject[5];
     private GameObject[] enemies = new GameObject[5];
@@ -41,7 +40,7 @@ public class BluePlayer : MonoBehaviour
         else
         {
             //Vector3 vector = gameObject.transform.position + new Vector3(0, 0.9f, 0);
-            bool ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
+            bool ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
             Debug.Log("BallInSight: ray = " + ray);
             if (ray) Debug.Log("hit = " + hit.collider.gameObject.name);
             return (ray && hit.transform == BallBody.transform);
@@ -92,7 +91,7 @@ public class BluePlayer : MonoBehaviour
         meanX /= 5;
 
         float limitX;
-        float originZ = gameObject.transform.position.z;
+        //float originZ = gameObject.transform.position.z;
         float signX;
 
         if (meanX > gameObject.transform.position.x) signX = -1;
@@ -102,11 +101,11 @@ public class BluePlayer : MonoBehaviour
         else limitX = 60;
 
         if (gameObject.transform.position.x < limitX) ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
-        else Oscillate(originZ);
+        else Oscillate();
     }
-    private void Oscillate(float originZ)
+    private void Oscillate()
     {
-        rb.AddForce(0,0, Mathf.Cos(Time.time * 10 / Mathf.PI) * 100);
+        rb.AddForce(0,0, Mathf.Cos(Time.time * 10 / Mathf.PI) * 500);
         //float signZ;
         //float max = Math.Max(Math.Abs(originZ - gameObject.transform.position.z), 10);
         //if (originZ > gameObject.transform.position.z) signZ = -1;
@@ -265,7 +264,6 @@ public class BluePlayer : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        coll = GetComponent<Collider>();
         if (!BallBody) return;
 
         RedPos = GameObject.Find("RedGoal").GetComponent<Rigidbody>().position;
