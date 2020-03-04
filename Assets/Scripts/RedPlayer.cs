@@ -25,7 +25,6 @@ public class RedPlayer : MonoBehaviour
         foreach (GameObject go in enemies)
         {
             if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange) count += 1;
-            // && go.transform.position.x > gameObject.transform.position.x
         }
         return count;
     }
@@ -41,15 +40,14 @@ public class RedPlayer : MonoBehaviour
         {
             //Vector3 vector = gameObject.transform.position + new Vector3(0, 0.9f, 0);
             bool ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
-            Debug.Log("BallInSight: ray = " + ray);
-            if (ray) Debug.Log("hit = " + hit.collider.gameObject.name);
+            if (ray) Debug.Log("BallInSight hit = " + hit.collider.gameObject.name);
             return (ray && hit.transform == BallBody.transform);
         }
     }
 
     private bool GoalInSight()
     {
-        bool ray = Physics.Raycast(gameObject.transform.position, RedPos - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
+        bool ray = Physics.Raycast(gameObject.transform.position, BluePos - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
         Debug.Log("GoalInSight: ray = " + ray + " distance = " + hit.distance + " hit = " + hit.transform.name);
         return (ray && hit.transform.position == RedPos & hit.distance < 40);
     }
@@ -92,14 +90,13 @@ public class RedPlayer : MonoBehaviour
         meanX /= 5;
 
         float limitX;
-        //float originZ = gameObject.transform.position.z;
         float signX;
 
         if (meanX > gameObject.transform.position.x) signX = -1;
         else signX = 1;
 
-        if (signX > 0) limitX = -60;
-        else limitX = -80;
+        if (signX > 0) limitX = -50;
+        else limitX = -70;
 
         if (gameObject.transform.position.x > limitX) ApplyForceToReachVelocity(rb, new Vector3(-10, 0, 0), 20);
         else Oscillate();
@@ -122,7 +119,7 @@ public class RedPlayer : MonoBehaviour
         private void ShootBall()
         {
             if (!GoalInSight()) return;
-            ////Debug.Log("Provo a tirare");
+            //Debug.Log("Provo a tirare");
             BallBody.AddForce((BluePos - gameObject.transform.position).normalized * 2500);
             ball.SetPlayer(null);
         }

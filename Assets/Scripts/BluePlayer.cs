@@ -25,7 +25,6 @@ public class BluePlayer : MonoBehaviour
         foreach (GameObject go in enemies)
         {
             if ((go.transform.position - gameObject.transform.position).magnitude < DangerRange) count += 1;
-            // && go.transform.position.x < gameObject.transform.position.x
         }
         return count;
     }
@@ -91,14 +90,13 @@ public class BluePlayer : MonoBehaviour
         meanX /= 5;
 
         float limitX;
-        //float originZ = gameObject.transform.position.z;
         float signX;
 
         if (meanX > gameObject.transform.position.x) signX = -1;
         else signX = 1;
 
-        if (signX > 0) limitX = 80;
-        else limitX = 60;
+        if (signX > 0) limitX = 70;
+        else limitX = 50;
 
         if (gameObject.transform.position.x < limitX) ApplyForceToReachVelocity(rb, new Vector3(10, 0, 0), 20);
         else Oscillate();
@@ -245,22 +243,22 @@ public class BluePlayer : MonoBehaviour
     {
         if ((BallBody.transform.position - gameObject.transform.position).magnitude <= 1.5 && ball.player == null) { ball.SetPlayer(gameObject); }
     }
-    private void PrintAdvance()
-    {
-        Debug.Log(gameObject.ToString() + "Advance");
-    }
-    private void PrintSupport()
-    {
-        Debug.Log(gameObject.ToString() + "Support - BallToMate = " + BallToMate());
-    }
-    private void PrintBacking()
-    {
-        Debug.Log(gameObject.ToString() + "Backing");
-    }
-    private void PrintChase()
-    {
-        Debug.Log(gameObject.ToString() + "Chase");
-    }
+    //private void PrintAdvance()
+    //{
+     //   Debug.Log(gameObject.ToString() + "Advance");
+    //}
+    //private void PrintSupport()
+    //{
+      //  Debug.Log(gameObject.ToString() + "Support - BallToMate = " + BallToMate());
+    //}
+    //private void PrintBacking()
+    //{
+     //   Debug.Log(gameObject.ToString() + "Backing");
+    //}
+    //private void PrintChase()
+    //{
+     //   Debug.Log(gameObject.ToString() + "Chase");
+    //}
     void Start()
     {
         rb = GetComponent<Rigidbody>();
