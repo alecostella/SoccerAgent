@@ -241,7 +241,7 @@ public class RedPlayer : MonoBehaviour
 
         private void CatchBall()
         {
-            if ((BallBody.transform.position - gameObject.transform.position).magnitude <= 1.5 && ball.player == null) { ball.SetPlayer(gameObject); }
+            if ((BallBody.transform.position - gameObject.transform.position).magnitude <= 3 && ball.player == null) { ball.SetPlayer(gameObject); }
         }
 
         private void PrintAdvance()
