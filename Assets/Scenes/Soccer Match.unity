@@ -162,7 +162,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 97679087}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f9e09069e644fcf49a24fa3fc597b7a1, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -241,7 +241,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 4
   m_CollisionDetection: 0
 --- !u!1 &151058115
 GameObject:
@@ -545,7 +545,7 @@ GameObject:
   - component: {fileID: 459470183}
   m_Layer: 0
   m_Name: WhiteWall1
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -655,7 +655,7 @@ GameObject:
   - component: {fileID: 653140165}
   m_Layer: 0
   m_Name: WhiteWall4
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1552,7 +1552,7 @@ GameObject:
   - component: {fileID: 1459741551}
   m_Layer: 0
   m_Name: WhiteWall2
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2058,7 +2058,7 @@ GameObject:
   - component: {fileID: 1723515337}
   m_Layer: 0
   m_Name: WhiteWall3
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

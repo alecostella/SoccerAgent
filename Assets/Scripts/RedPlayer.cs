@@ -34,12 +34,12 @@ public class RedPlayer : MonoBehaviour
         if (ball.player != null)
         {
             bool ray = Physics.Raycast(gameObject.transform.position, ball.player.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
-            return (ray && hit.transform == ball.player.transform);
+            return (ray & hit.transform == ball.player.transform);
         }
         else
         {
             bool ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
-            return (ray && hit.transform == BallBody.transform);
+            return (ray & hit.transform == BallBody.transform);
         }
     }
 
@@ -47,7 +47,7 @@ public class RedPlayer : MonoBehaviour
     {
         bool ray = Physics.Raycast(gameObject.transform.position, BluePos - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
         Debug.Log("GoalInSight: ray = " + ray + " distance = " + hit.distance + " hit = " + hit.transform.name);
-        return (ray && hit.transform.position == RedPos & hit.distance < 40);
+        return (hit.transform.position == BluePos & hit.distance < 40);
     }
 
     private bool OneEnemyAround()
@@ -102,11 +102,6 @@ public class RedPlayer : MonoBehaviour
     private void Oscillate()
     {
         rb.AddForce(0, 0, Mathf.Cos(Time.time * 10 / Mathf.PI) * 500);
-        //float signZ;
-        //float max = Math.Max(Math.Abs(originZ - gameObject.transform.position.z), 10);
-        //if (originZ > gameObject.transform.position.z) signZ = -1;
-        //else signZ = 1;
-        //rb.AddForce(new Vector3(0, 0, 10 * max * signZ));
     }
     private void ChaseBall()
         {
@@ -233,7 +228,7 @@ public class RedPlayer : MonoBehaviour
 
         private void CatchBall()
         {
-            if ((BallBody.transform.position - gameObject.transform.position).magnitude <= 3 && ball.player == null) { ball.SetPlayer(gameObject); }
+            if ((BallBody.transform.position - gameObject.transform.position).magnitude <= 3 & ball.player == null) { ball.SetPlayer(gameObject); }
         }
 
         private void PrintAdvance()
