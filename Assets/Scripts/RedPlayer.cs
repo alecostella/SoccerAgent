@@ -38,9 +38,7 @@ public class RedPlayer : MonoBehaviour
         }
         else
         {
-            //Vector3 vector = gameObject.transform.position + new Vector3(0, 0.9f, 0);
             bool ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
-            if (ray) Debug.Log("BallInSight hit = " + hit.collider.gameObject.name);
             return (ray && hit.transform == BallBody.transform);
         }
     }
@@ -119,7 +117,6 @@ public class RedPlayer : MonoBehaviour
         private void ShootBall()
         {
             if (!GoalInSight()) return;
-            //Debug.Log("Provo a tirare");
             BallBody.AddForce((BluePos - gameObject.transform.position).normalized * 2500);
             ball.SetPlayer(null);
         }
@@ -144,7 +141,6 @@ public class RedPlayer : MonoBehaviour
             if (MoreEnemiesAround() & CanIPass())
             {
                 GameObject receiver = LookForAlly();
-                //Debug.Log("Passo a" + receiver.ToString());
                 BallBody.AddForce((receiver.transform.position - gameObject.transform.position).normalized * 2500);
                 ball.SetPlayer(null);
             }
@@ -183,8 +179,6 @@ public class RedPlayer : MonoBehaviour
             if (!OneEnemyAround()) return;
             bool success = Rand.Next(5) <= Skill;
 
-            Debug.Log("Dribbling: " + success);
-
             Rigidbody EnemyBody = null;
             GameObject Enemy = null;
             foreach (GameObject go in enemies)
@@ -208,7 +202,6 @@ public class RedPlayer : MonoBehaviour
             }
             else
             {
-                Debug.Log(Enemy.ToString());
                 //loses ball control
                 ball.SetPlayer(Enemy);
             }
@@ -232,7 +225,6 @@ public class RedPlayer : MonoBehaviour
         {
             if (MoreEnemiesAround() & !CanIPass())
             {
-                //Debug.Log("Red HardDribble");
                 Skill -= 1;
                 TryDribble();
                 Skill += 1;

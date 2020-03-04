@@ -38,10 +38,7 @@ public class BluePlayer : MonoBehaviour
         }
         else
         {
-            //Vector3 vector = gameObject.transform.position + new Vector3(0, 0.9f, 0);
             bool ray = Physics.Raycast(gameObject.transform.position, BallBody.transform.position - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity);
-            Debug.Log("BallInSight: ray = " + ray);
-            if (ray) Debug.Log("hit = " + hit.collider.gameObject.name);
             return (ray && hit.transform == BallBody.transform);
         }
     }
@@ -119,7 +116,6 @@ public class BluePlayer : MonoBehaviour
     private void ShootBall()
     {
         if (!GoalInSight()) return;
-        //Debug.Log("Provo a tirare");
         BallBody.AddForce((RedPos - gameObject.transform.position).normalized * 2500);
         ball.SetPlayer(null);
     }
@@ -145,7 +141,6 @@ public class BluePlayer : MonoBehaviour
         if (MoreEnemiesAround() & CanIPass())
         {
             GameObject receiver = LookForAlly();
-            Debug.Log("Passo a " + receiver.ToString());
             BallBody.AddForce((receiver.transform.position - gameObject.transform.position).normalized * 2500);
             ball.SetPlayer(null);
         }
@@ -184,8 +179,6 @@ public class BluePlayer : MonoBehaviour
         if (!OneEnemyAround()) return;
         bool success = Rand.Next(5) <= Skill;
 
-        Debug.Log("Dribbling: " + success);
-
         Rigidbody EnemyBody = null;
         GameObject Enemy = null;
         foreach (GameObject go in enemies)
@@ -209,7 +202,6 @@ public class BluePlayer : MonoBehaviour
         }
         else
         {
-            Debug.Log(Enemy.ToString());
             ball.SetPlayer(Enemy);
         }
     }
@@ -232,7 +224,6 @@ public class BluePlayer : MonoBehaviour
     {
         if (MoreEnemiesAround() & !CanIPass())
         {
-            //Debug.Log("Blue HardDribble");
             Skill -= 1;
             TryDribble();
             Skill += 1;
