@@ -150,7 +150,9 @@ public class RedPlayer : MonoBehaviour
                     meanZ += go.transform.position.z;
                 }
                 meanZ /= 5;
-                float sign = (gameObject.transform.position.z - meanZ) / Math.Abs(gameObject.transform.position.z - meanZ);
+                float sign;
+            if (gameObject.transform.position.z > meanZ) sign = -1;
+            else sign = 1;
                 ApplyForceToReachVelocity(rb, (new Vector3(60, 0, -50 * sign) - gameObject.transform.position).normalized * 10, 20);
             }
             else
@@ -243,7 +245,7 @@ public class RedPlayer : MonoBehaviour
             Skill = Rand.Next(1) + 3;
 
             FSMState Advance = new FSMState();
-            Advance.enterActions.Add(BringBallAhead);
+            //Advance.enterActions.Add(BringBallAhead);
             Advance.stayActions.Add(BringBallAhead);
             Advance.stayActions.Add(TryDribble);
             Advance.stayActions.Add(HardDribble);
@@ -251,15 +253,12 @@ public class RedPlayer : MonoBehaviour
             Advance.stayActions.Add(PassTheBall);
 
             FSMState SupportAdv = new FSMState();
-            SupportAdv.enterActions.Add(ReachPosition);
             SupportAdv.stayActions.Add(ReachPosition);
 
             FSMState Backing = new FSMState();
-            Backing.enterActions.Add(RetreatToGoal);
             Backing.stayActions.Add(RetreatToGoal);
 
             FSMState Chase = new FSMState();
-            Chase.enterActions.Add(ChaseBall);
             Chase.stayActions.Add(ChaseBall);
             Chase.stayActions.Add(SpeedRun);
 

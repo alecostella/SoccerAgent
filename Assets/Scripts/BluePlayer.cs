@@ -239,7 +239,6 @@ public class BluePlayer : MonoBehaviour
         Skill = Rand.Next(1) + 3;
 
         FSMState Advance = new FSMState();
-        Advance.enterActions.Add(BringBallAhead);
         Advance.stayActions.Add(BringBallAhead);
         Advance.stayActions.Add(TryDribble);
         Advance.stayActions.Add(HardDribble);
@@ -247,15 +246,12 @@ public class BluePlayer : MonoBehaviour
         Advance.stayActions.Add(PassTheBall);
 
         FSMState SupportAdv = new FSMState();
-        SupportAdv.enterActions.Add(ReachPosition);
         SupportAdv.stayActions.Add(ReachPosition);
 
         FSMState Backing = new FSMState();
-        Backing.enterActions.Add(RetreatToGoal);
         Backing.stayActions.Add(RetreatToGoal);
 
         FSMState Chase = new FSMState();
-        Chase.enterActions.Add(ChaseBall);
         Chase.stayActions.Add(ChaseBall);
         Chase.stayActions.Add(SpeedRun);
 
