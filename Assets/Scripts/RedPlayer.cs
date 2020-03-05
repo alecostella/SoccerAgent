@@ -278,12 +278,7 @@ public class RedPlayer : MonoBehaviour
             Backing.AddTransition(t4, Chase);
             Backing.AddTransition(t2, SupportAdv);
 
-            FSMState Starting = new FSMState();
-            Starting.AddTransition(t1, Advance);
-            Starting.AddTransition(t2, SupportAdv);
-            Starting.AddTransition(t3, Backing);
-
-            fsm = new FSM(Starting);
+            fsm = new FSM(Chase);
             StartCoroutine(Play());
 
         }
