@@ -46,7 +46,6 @@ public class RedPlayer : MonoBehaviour
     private bool GoalInSight()
     {
         bool ray = Physics.Raycast(gameObject.transform.position, BluePos - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
-        Debug.Log("GoalInSight: ray = " + ray + " distance = " + hit.distance + " hit = " + hit.transform.name);
         return (hit.transform.position == BluePos & hit.distance < 40);
     }
 
@@ -231,23 +230,6 @@ public class RedPlayer : MonoBehaviour
             if ((BallBody.transform.position - gameObject.transform.position).magnitude <= 3 & ball.player == null) { ball.SetPlayer(gameObject); }
         }
 
-        private void PrintAdvance()
-        {
-            //Debug.Log(gameObject.ToString() + "BallControl = "+ BallControl());
-        }
-        private void PrintSupport()
-        {
-            //Debug.Log(gameObject.ToString() + "BallToMate = " + BallToMate());
-        }
-        private void PrintBacking()
-        {
-            //Debug.Log(gameObject.ToString() + "Backing - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
-        }
-        private void PrintChase()
-        {
-            //Debug.Log(gameObject.ToString() + "Chase - Ball to enemy = " + EnemyBall() + " - Ball in sight = " + BallInSight());
-        }
-
         void Start()
         {
             rb = GetComponent<Rigidbody>();
@@ -280,11 +262,6 @@ public class RedPlayer : MonoBehaviour
             Chase.enterActions.Add(ChaseBall);
             Chase.stayActions.Add(ChaseBall);
             Chase.stayActions.Add(SpeedRun);
-
-            Advance.enterActions.Add(PrintAdvance);
-            SupportAdv.enterActions.Add(PrintSupport);
-            Backing.enterActions.Add(PrintBacking);
-            Chase.enterActions.Add(PrintChase);
 
             FSMTransition t1 = new FSMTransition(BallControl);
             FSMTransition t2 = new FSMTransition(BallToMate);
