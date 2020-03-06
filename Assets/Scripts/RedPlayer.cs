@@ -46,7 +46,7 @@ public class RedPlayer : MonoBehaviour
     private bool GoalInSight()
     {
         bool ray = Physics.Raycast(gameObject.transform.position, BluePos - gameObject.transform.position, out RaycastHit hit, Mathf.Infinity, 1);
-        return (hit.transform.position == BluePos & hit.distance < 40);
+        return (ray && hit.transform.position == BluePos & hit.distance < 40);
     }
 
     private bool OneEnemyAround()
