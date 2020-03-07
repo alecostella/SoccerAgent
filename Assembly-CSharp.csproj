@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\FSMState.cs" />
     <Compile Include="Assets\Scripts\FSMTransition.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\GoalReceiver.cs" />
     <Compile Include="Assets\Scripts\RedPlayer.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/Alessandro/Desktop/SoccerAgent/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

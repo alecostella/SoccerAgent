@@ -14,7 +14,11 @@ public class BelongsTo : MonoBehaviour
         if (Player != null) transform.position = player.transform.position + new Vector3(0, 0.9f, 0);
     }
 
-    public void Start() { rb = GetComponent<Rigidbody>(); }
+    public void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        player = null;
+    }
 
     public void Update()
     {
